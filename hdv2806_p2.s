@@ -109,10 +109,12 @@ _mod_unsigned:
     MOV PC, LR          @ return
    
 _compare:
+    PUSH {LR}               @ backup return address
     CMP R6, R1  
     MOVLT R6, R1        @move less than
     CMP R7, R1          
     MOVGT R7, R1	@move greater than
+    POP {PC}                @ return 
 
 
 .data
