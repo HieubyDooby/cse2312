@@ -120,7 +120,7 @@ _compare:
 .balign 4
 a:              .skip       400
 printf_str:     .asciz      "a[%d] = %d\n"
-printf_min      .asciz	    "MINIMUM VALUE = %d\n" @just use asciz
+printf_min      .asciz	    "MINIMUM VALUE = %d\n"
 printf_max      .asciz	    "MAXIMUM VALUE = %d\n"
 debug_str:
 .asciz "R%-2d   0x%08X  %011d \n"
