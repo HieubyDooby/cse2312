@@ -30,6 +30,10 @@ readloop:
     LSL R2, R0, #2          @ multiply index*4 to get array offset
     ADD R2, R1, R2          @ R2 now has the element address
     LDR R1, [R2]            @ read the array at address 
+    CMP R0, #0		    @ checking if iterator is 0
+    MOVEQ R6, R1	    @ storing value into R6
+    MOVEQ R7, R1	    @ storing r1 into r7 for comparing
+    BL _compare             @
     PUSH {R0}               @ backup register before printf
     PUSH {R1}               @ backup register before printf
     PUSH {R2}               @ backup register before printf
@@ -42,6 +46,10 @@ readloop:
     ADD R0, R0, #1          @ increment index
     B   readloop            @ branch to next loop iteration
 readdone:
+    MOV R1, R6
+    BL _printmin
+    MOV R1, R7
+    BL _printmax
     B _exit                 @ exit if done
     
 _exit:  
@@ -56,6 +64,18 @@ _exit:
 _printf:
     PUSH {LR}               @ store the return address
     LDR R0, =printf_str     @ R0 contains formatted string address
+    BL printf               @ call printf
+    POP {PC}                @ restore the stack pointer and return
+
+_printmin:
+    PUSH {LR}
+    LDR R0, =printf_min     @ R0 contains formatted string address
+    BL printf               @ call printf
+    POP {PC}                @ restore the stack pointer and return
+
+_printmax:
+    PUSH {LR}
+    LDR R0, =printf_max     @ R0 contains formatted string address
     BL printf               @ call printf
     POP {PC}                @ restore the stack pointer and return
     
@@ -88,11 +108,20 @@ _mod_unsigned:
     MOV R0, R1          @ move remainder to R0
     MOV PC, LR          @ return
    
+_compare:
+    CMP R6, R1  
+    MOVLT R6, R1        @move less than
+    CMP R7, R1          
+    MOVGT R7, R1	@move greater than
+
+
 .data
 
 .balign 4
 a:              .skip       400
 printf_str:     .asciz      "a[%d] = %d\n"
+printf_min      .asciz	    "MINIMUM VALUE = %d\n" @just use asciz
+printf_max      .asciz	    "MAXIMUM VALUE = %d\n"
 debug_str:
 .asciz "R%-2d   0x%08X  %011d \n"
 exit_str:       .ascii      "Terminating program.\n"
