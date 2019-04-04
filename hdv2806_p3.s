@@ -37,7 +37,7 @@ _printf:
     PUSH {LR}               @ store the return address
     LDR R0, =printf_str     @ R0 contains formatted string address
     MOV R1, R1              @ R1 contains printf argument 1 (redundant line)
-    MOV R2, R2              @ R2 contains printf argument 2 (redundant line)
+    MOV R2, R1              @ R2 contains printf argument 2 (redundant line)
     MOV R3, R2
     BL printf               @ call printf
     POP {PC}                @ restore the stack pointer and return
