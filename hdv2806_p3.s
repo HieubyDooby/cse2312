@@ -12,7 +12,6 @@ main:
     MOV R1, R4
     MOV R2, R5
 
-
     BL  _part
     MOV R1, R4              @ pass n to printf procedure
     MOV R2, R0              @ pass result to printf procedure
@@ -37,8 +36,8 @@ _prompt:
 _printf:
     PUSH {LR}               @ store the return address
     LDR R0, =printf_str     @ R0 contains formatted string address
-    MOV R1, R1             @ R1 contains printf argument 1 (redundant line)
-    MOV R2, R2             @ R2 contains printf argument 2 (redundant line)
+    MOV R1, R1              @ R1 contains printf argument 1 (redundant line)
+    MOV R2, R2              @ R2 contains printf argument 2 (redundant line)
     BL printf               @ call printf
     POP {PC}                @ restore the stack pointer and return
 
@@ -89,5 +88,5 @@ _part:
 .data
 number:         .word       0
 format_str:     .asciz      "%d"
-prompt_str:     .asciz      "Enter two positive numbers: "
-printf_str:     .asciz      "There are %d partitions of %d using integers up to %d"
+prompt_str:     .asciz      "Enter two positive numbers: \n"
+printf_str:     .asciz      "There are %d partitions of %d using integers up to %d\n"
