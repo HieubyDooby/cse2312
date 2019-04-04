@@ -61,12 +61,10 @@ _part:
     MOVEQ R0, #1            @ set return value to 1 if equal
     POPEQ {PC}              @ restore stack pointer and return if equal
 
-    PUSH {LR}               @ store the return address
     CMP R1, #0              @ compare the input argument to 1
     MOVLT R0, #0            @ set return value to 1 if equal
     POPLT {PC}              @ restore stack pointer and return if equal
 
-    PUSH {LR}               @ store the return address
     CMP R2, #0              @ compare the input argument to 1
     MOVEQ R0, #0            @ set return value to 1 if equal
     POPEQ {PC}              @ restore stack pointer and return if equal
@@ -84,7 +82,6 @@ _part:
     POP {R4}
     ADD R0, R0, R4
 
-    POP {R0}
     POP  {PC}               @ restore the stack pointer and return
 
 .data
