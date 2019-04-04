@@ -84,6 +84,7 @@ _part:
     POP {R4}
     ADD R0, R0, R4
 
+    POP {R0}
     POP  {PC}               @ restore the stack pointer and return
 
 .data
