@@ -26,19 +26,6 @@ main:
     VMOV R1, R2, D4         @ split the double VFP register into two ARM registers
     
 
-  _prompt:
-    PUSH {R1}               @ backup register value
-    PUSH {R2}               @ backup register value
-    PUSH {R7}               @ backup register value      MOV R7, #4              @ write syscall, 4
-    MOV R0, #1              @ output stream to monitor, 1
-    MOV R2, #26             @ print string length
-    LDR R1, =prompt_str     @ string at label prompt_str:
-    SWI 0                   @ execute syscall
-    POP {R7}                @ restore register value
-    POP {R2}                @ restore register value
-    POP {R1}                @ restore register value
-    MOV PC, LR              @ return
-
    _scanf:
     PUSH {LR}               @ store the return address
     PUSH {R1}               @ backup regsiter value
@@ -51,9 +38,9 @@ main:
     POP {R1}                @ restore register value
     POP {PC}                @ restore the stack pointer and return
 
-_printf_result:
+  _prompt:
     PUSH {LR}               @ push LR to stack
-    LDR R0, =result_str     @ R0 contains formatted string address
+    LDR R0, =prompt_str     @ R0 contains formatted string address
     BL printf               @ call printf
     POP {PC}                @ pop LR from stack and return
 
