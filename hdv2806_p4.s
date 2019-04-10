@@ -4,6 +4,8 @@
 main:
 
     BL  _divide
+    
+
 
   _divide:
     BL  _prompt             @ branch to prompt procedure with return
@@ -11,12 +13,11 @@ main:
     MOV R4, R0              @ store n in R4
     BL  _scanf              @ branch to scan procedure with return
     MOV R5, R0              @ store m in R5
-    
     MOV R1, R4              @ load the numerator
     MOV R2, R5              @ load the denominator
-    BL _printf_result
-    VMOV S0, R0             @ move the numerator to floating point register
-    VMOV S1, R1             @ move the denominator to floating point register
+    BL  _printf_result
+    VMOV S0, R4             @ move the numerator to floating point register
+    VMOV S1, R5             @ move the denominator to floating point register
     VCVT.F32.U32 S0, S0     @ convert unsigned bit representation to single float
     VCVT.F32.U32 S1, S1     @ convert unsigned bit representation to single float
 	
@@ -24,10 +25,8 @@ main:
     
     VCVT.F64.F32 D4, S2     @ covert the result to double precision for printing
     VMOV R1, R2, D4         @ split the double VFP register into two ARM registers
-    BL _printf_result1
-    B   _exit               @ branch to exit procedure with no return
-
-
+    BL  _printf_result1     @ print the result
+    B   _exit 
 
    _exit:  
     MOV R7, #4              @ write syscall, 4
@@ -36,8 +35,8 @@ main:
     LDR R1, =exit_str       @ string at label exit_str:
     SWI 0                   @ execute syscall
     MOV R7, #1              @ terminate syscall, 1
-    SWI 0                   @ execute syscall
-    
+    SWI 0  
+
    _scanf:
     PUSH {LR}               @ store the return address
     PUSH {R1}               @ backup regsiter value
@@ -58,19 +57,21 @@ main:
 
   _printf_result:
     PUSH {LR}               @ push LR to stack
-    LDR R0, =format_str     @ R0 contains formatted string address
+    LDR R0, =result_str     @ R0 contains formatted string address
+    BL printf               @ call printf
+    POP {PC}   
+
+  _printf_result1:
+    PUSH {LR}               @ push LR to stack
+    LDR R0, =formatz_str    
     BL printf               @ call printf
     POP {PC} 
 
-    _printf_result1:
-      PUSH {LR}               @ push LR to stack
-      LDR R0, =formatz_str     @ R0 contains formatted string address
-      BL printf               @ call printf
-      POP {PC}  
+
 
 .data
-result_str:     .asciz      "%d/%d = "
+result_str:     .asciz      "%d/%d ="
 format_str:     .asciz      "%d"
-formatz_str:    .asciz     " %f\n"
+formatz_str:	.asciz	    " %f \n"
 prompt_str:     .asciz      "Enter two numbers: \n"
 exit_str:       .ascii      "Terminating program.\n"
