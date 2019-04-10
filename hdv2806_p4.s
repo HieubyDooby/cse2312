@@ -25,7 +25,19 @@ main:
     VCVT.F64.F32 D4, S2     @ covert the result to double precision for printing
     VMOV R1, R2, D4         @ split the double VFP register into two ARM registers
     BL _printf_result1
+    B   _exit               @ branch to exit procedure with no return
 
+
+
+   _exit:  
+    MOV R7, #4              @ write syscall, 4
+    MOV R0, #1              @ output stream to monitor, 1
+    MOV R2, #21             @ print string length
+    LDR R1, =exit_str       @ string at label exit_str:
+    SWI 0                   @ execute syscall
+    MOV R7, #1              @ terminate syscall, 1
+    SWI 0                   @ execute syscall
+    
    _scanf:
     PUSH {LR}               @ store the return address
     PUSH {R1}               @ backup regsiter value
