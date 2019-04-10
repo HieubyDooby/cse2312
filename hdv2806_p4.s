@@ -4,7 +4,6 @@
 main:
 
     BL  _divide
-    BL  _printf_result      @ print the result
 
   _divide:
     BL  _prompt             @ branch to prompt procedure with return
