@@ -4,7 +4,6 @@
 main:
 
     BL  _divide
-    BL  _printf_result      @ print the result
 
   _divide:
     BL  _prompt             @ branch to prompt procedure with return
@@ -13,8 +12,9 @@ main:
     BL  _scanf              @ branch to scan procedure with return
     MOV R5, R0              @ store m in R5
     
-    MOV R0, R4              @ load the numerator
-    MOV R1, R5              @ load the denominator
+    MOV R1, R4              @ load the numerator
+    MOV R2, R5              @ load the denominator
+    BL _printf_result
     VMOV S0, R0             @ move the numerator to floating point register
     VMOV S1, R1             @ move the denominator to floating point register
     VCVT.F32.U32 S0, S0     @ convert unsigned bit representation to single float
@@ -24,7 +24,7 @@ main:
     
     VCVT.F64.F32 D4, S2     @ covert the result to double precision for printing
     VMOV R1, R2, D4         @ split the double VFP register into two ARM registers
-    
+    BL _printf_result1
 
    _scanf:
     PUSH {LR}               @ store the return address
@@ -48,10 +48,17 @@ main:
     PUSH {LR}               @ push LR to stack
     LDR R0, =format_str     @ R0 contains formatted string address
     BL printf               @ call printf
-    POP {PC}   
+    POP {PC} 
+
+    _printf_result1:
+      PUSH {LR}               @ push LR to stack
+      LDR R0, =formatz_str     @ R0 contains formatted string address
+      BL printf               @ call printf
+      POP {PC}  
 
 .data
-result_str:     .asciz      "%d/%d = %d\n"
-format_str:     .asciz      "%f"
+result_str:     .asciz      "%d/%d = "
+format_str:     .asciz      "%d"
+formatz_str:    .asciz     " %f\n"
 prompt_str:     .asciz      "Enter two numbers: \n"
 exit_str:       .ascii      "Terminating program.\n"
