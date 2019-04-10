@@ -4,6 +4,7 @@
 main:
 
     BL  _divide
+    BL  _printf_result      @ print the result
 
   _divide:
     BL  _prompt             @ branch to prompt procedure with return
@@ -43,8 +44,14 @@ main:
     BL printf               @ call printf
     POP {PC}                @ pop LR from stack and return
 
+  _printf_result:
+    PUSH {LR}               @ push LR to stack
+    LDR R0, =format_str     @ R0 contains formatted string address
+    BL printf               @ call printf
+    POP {PC}   
+
 .data
 result_str:     .asciz      "%d/%d = %d\n"
-format_str:     .asciz      "%d"
+format_str:     .asciz      "%f"
 prompt_str:     .asciz      "Enter two numbers: \n"
 exit_str:       .ascii      "Terminating program.\n"
